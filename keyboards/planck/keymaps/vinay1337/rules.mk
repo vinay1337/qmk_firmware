@@ -1,4 +1,5 @@
 SRC += muse.c
 MOUSEKEY_ENABLE = yes
-LEADER_ENABLE = yes
-# TAP_DANCE_ENABLE = yes 
+# LEADER_ENABLE = yes
+TAP_DANCE_ENABLE = yes 
+UNICODE_ENABLE = yes

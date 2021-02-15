@@ -38,11 +38,75 @@ enum planck_keycodes {
   EXT_PLV
 };
 
-#define LOWER MO(_LOWER)
-#define RAISE MO(_RAISE)
-#define NAVIG MO(_MOVE)
-#define ESC_MOV LT(_MOVE, KC_ESC)
-#define ONESHFT OSM(MOD_LSFT)
+// Tap Dance declarations
+enum td_keycodes {
+    TD_CTRL,
+};
+
+typedef enum {
+    SINGLE_TAP,
+    SINGLE_HOLD,
+    DOUBLE_SINGLE_TAP
+} td_state_t;
+
+static td_state_t td_state;
+
+// Tap Dance definitions
+uint8_t cur_dance(qk_tap_dance_state_t *state){
+  if (state->count == 1) {
+      if (state->interrupted || !state->pressed) return SINGLE_TAP;
+      else return SINGLE_HOLD;
+  }
+
+  if (state->count == 2) return DOUBLE_SINGLE_TAP;
+  else return 3; // Any number higher than the maximum state value you return above
+}
+// void td_ctrl_each(qk_tap_dance_state_t *state, void *user_data) {
+
+// }
+void td_ctrl_finished(qk_tap_dance_state_t *state, void *user_data) {
+  td_state = cur_dance(state);
+  switch (td_state) {
+    case SINGLE_TAP:
+      // register_code16(KC_LPRN);
+      register_mods(MOD_BIT(KC_LCTL));
+      break;
+    case SINGLE_HOLD:
+      register_mods(MOD_BIT(KC_LCTL)); // For a layer-tap key, use `layer_on(_MY_LAYER)` here
+      break;
+    case DOUBLE_SINGLE_TAP: // Allow nesting of 2 parens `((` within tapping term
+      // tap_code16(KC_LPRN);
+      // register_code16(KC_LPRN);
+      break;
+  }
+}
+void td_ctrl_reset(qk_tap_dance_state_t *state, void *user_data) {
+  switch (td_state) {
+    case SINGLE_TAP:
+      // unregister_code16(KC_LPRN);
+      unregister_mods(MOD_BIT(KC_LCTL));
+      break;
+    case SINGLE_HOLD:
+      unregister_mods(MOD_BIT(KC_LCTL)); // For a layer-tap key, use `layer_off(_MY_LAYER)` here
+      break;
+    case DOUBLE_SINGLE_TAP:
+        // unregister_code16(KC_LPRN);
+        break;
+    }
+}
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+    // Tap once for Escape, twice for Caps Lock
+    [TD_CTRL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_ctrl_finished, td_ctrl_reset),
+};
+
+#define LOWER    MO(_LOWER)
+#define RAISE    MO(_RAISE)
+#define NAVIG    MO(_MOVE)
+#define ESC_NAV  LT(_MOVE, KC_ESC)
+#define ENTRSFT  RSFT_T(KC_ENT)
+#define TD_CTRL  TD(TD_CTRL)
+#define ONESHFT  OSM(MOD_LSFT)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -59,9 +123,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_QWERTY] = LAYOUT_planck_grid(
     KC_TAB , KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
-    ESC_MOV, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
-    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, RSFT_T(KC_ENT),
-    KC_LCTL, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_RCTL, KC_RALT, KC_LEAD, ONESHFT
+    ESC_NAV, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
+    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, ENTRSFT,
+    TD_CTRL, KC_LCTL, KC_LGUI, KC_LALT, RAISE,   KC_SPC,  KC_SPC,  LOWER,   KC_RCTL, KC_RGUI, KC_RALT, ONESHFT
 ),
 
 /* Lower
@@ -77,9 +141,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_LOWER] = LAYOUT_planck_grid(
     KC_GRV , KC_EXLM,   KC_AT, KC_HASH, KC_DLR , KC_PERC, KC_CIRC, KC_AMPR   , KC_ASTR  , KC_LPRN, KC_RPRN, KC_DEL,
-    KC_TILD,  KC_F1 ,   KC_F2, KC_F3  , KC_F4  , KC_F5  , KC_F6  , KC_MINS   , KC_EQL   , KC_LBRC, KC_RBRC, KC_PIPE,
-    KC_BSLS,  KC_F7 ,   KC_F8, KC_F9  , KC_F10 , KC_F11 , KC_F12 , S(KC_MINS), S(KC_EQL), KC_LCBR, KC_RCBR, KC_BSLS,
-    _______, _______, _______, _______, _______, _______, _______, _______   , KC_MNXT  , KC_VOLD, KC_VOLU, KC_MPLY
+    KC_TILD,  KC_F1 ,   KC_F2, KC_F3  , KC_F4  , KC_F5  , KC_F6  , KC_PMNS   , KC_COLN  , KC_MINS, KC_EQL , KC_BSLS,
+    _______,  KC_F7 ,   KC_F8, KC_F9  , KC_F10 , KC_F11 , KC_F12 , KC_PPLS   , XXXXXXX  , KC_LBRC, KC_RBRC, _______,
+    _______, _______, _______, _______, _______, KC_UNDS, KC_UNDS, _______   , KC_MNXT  , KC_VOLD, KC_VOLU, KC_MPLY
 ),
 
 /* Raise
@@ -95,9 +159,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_RAISE] = LAYOUT_planck_grid(
     KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7   , KC_8   , KC_9   , KC_0   , KC_BSPC,
-    KC_DEL,  _______, _______, _______, _______, _______, _______, KC_4   , KC_5   , KC_6   , KC_MINS, S(KC_EQL),
-    _______, _______, _______, _______, _______, _______, _______, KC_1   , KC_2   , KC_3   , KC_BSLS, _______,
-    _______, _______, _______, _______, _______, _______, _______, _______, KC_0   , KC_DOT , _______, _______
+    KC_ESC,  _______, _______, KC_MINS, _______, _______, _______, KC_4   , KC_5   , KC_6   , KC_COLN, _______,
+    _______, _______, _______, KC_CALC, _______, _______, _______, KC_1   , KC_2   , KC_3   , _______, _______,
+    _______, _______, _______, _______, _______, KC_UNDS, KC_UNDS, _______, KC_0   , KC_DOT , _______, _______
 ),
 
 /* Adjust (Lower + Raise)
@@ -114,7 +178,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_ADJUST] = LAYOUT_planck_grid(
     _______, RESET,   DEBUG,   RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD,  RGB_VAI, RGB_VAD, KC_DEL ,
-    _______, _______, MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  _______,  _______, _______, _______,
+    _______, AU_TOG, MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  _______,  _______, _______, _______,
     _______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  TERM_ON, TERM_OFF, _______, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______
 ),
@@ -122,12 +186,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_MOVE] = LAYOUT_planck_grid(
     KC_BTN2, _______, KC_MS_U, _______, KC_WH_U, _______, _______, _______, _______, _______, _______, KC_DEL ,
-    _______, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, _______, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, _______, _______,
+    _______, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, _______, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, KC_COLN, KC_DQUO,
     _______, _______, _______, _______, _______, KC_HOME, KC_END , _______, _______, _______, _______, _______,
     _______, _______, KC_BTN3, KC_BTN2, KC_BTN1, _______, _______, _______, _______, _______, _______, _______
 )
 
 };
+
+
+
+
 
 #ifdef AUDIO_ENABLE
   float plover_song[][2]     = SONG(PLOVER_SOUND);
@@ -140,25 +208,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case QWERTY:
-      if (record->event.pressed) {
-        print("mode just switched to qwerty and this is a huge string\n");
-        set_single_persistent_default_layer(_QWERTY);
-      }
-      return false;
-      break;
-    case COLEMAK:
-      if (record->event.pressed) {
-        set_single_persistent_default_layer(_COLEMAK);
-      }
-      return false;
-      break;
-    case DVORAK:
-      if (record->event.pressed) {
-        set_single_persistent_default_layer(_DVORAK);
-      }
-      return false;
-      break;
     case BACKLIT:
       if (record->event.pressed) {
         register_code(KC_RSFT);
@@ -214,38 +263,6 @@ uint16_t muse_counter = 0;
 uint8_t muse_offset = 70;
 uint16_t muse_tempo = 50;
 
-void encoder_update(bool clockwise) {
-  if (muse_mode) {
-    if (IS_LAYER_ON(_RAISE)) {
-      if (clockwise) {
-        muse_offset++;
-      } else {
-        muse_offset--;
-      }
-    } else {
-      if (clockwise) {
-        muse_tempo+=1;
-      } else {
-        muse_tempo-=1;
-      }
-    }
-  } else {
-    if (clockwise) {
-      #ifdef MOUSEKEY_ENABLE
-        tap_code(KC_MS_WH_DOWN);
-      #else
-        tap_code(KC_PGDN);
-      #endif
-    } else {
-      #ifdef MOUSEKEY_ENABLE
-        tap_code(KC_MS_WH_UP);
-      #else
-        tap_code(KC_PGUP);
-      #endif
-    }
-  }
-}
-
 void dip_switch_update_user(uint8_t index, bool active) {
     switch (index) {
         case 0: {
@@ -277,7 +294,7 @@ void dip_switch_update_user(uint8_t index, bool active) {
     }
 }
 
-LEADER_EXTERNS();
+// LEADER_EXTERNS();
 
 void matrix_scan_user(void) {
 #ifdef AUDIO_ENABLE
@@ -298,30 +315,27 @@ void matrix_scan_user(void) {
         }
     }
 #endif
-LEADER_DICTIONARY() {
-    leading = false;
-    leader_end();
+// LEADER_DICTIONARY() {
+//     leading = false;
+//     leader_end();
 
-    SEQ_ONE_KEY(KC_L) {
-      // Anything you can do in a macro.
-      register_code(KC_LGUI);
-      register_code(KC_L);
-      unregister_code(KC_L);
-      unregister_code(KC_LGUI);
-    }
-    SEQ_TWO_KEYS(KC_D, KC_D) {
-      SEND_STRING(SS_LCTL("a") SS_LCTL("c"));
-    }
-    SEQ_THREE_KEYS(KC_D, KC_D, KC_S) {
-      SEND_STRING("https://start.duckduckgo.com\n");
-    }
-    SEQ_TWO_KEYS(KC_A, KC_S) {
-      register_code(KC_LGUI);
-      register_code(KC_S);
-      unregister_code(KC_S);
-      unregister_code(KC_LGUI);
-    }
-  }
+//     SEQ_ONE_KEY(KC_L) {
+//       // Anything you can do in a macro.
+//       register_code(KC_LGUI);
+//       register_code(KC_L);
+//       unregister_code(KC_L);
+//       unregister_code(KC_LGUI);
+//     }
+//     SEQ_TWO_KEYS(KC_C, KC_C) {
+//       tap_code(KC_CAPS);
+//     }
+//     SEQ_TWO_KEYS(KC_P, KC_P) {
+//       tap_code(KC_PSCR);
+//     }
+//     SEQ_FIVE_KEYS(KC_R, KC_E, KC_S, KC_E, KC_T) {
+//       reset_keyboard();
+//     }
+//   }
 }
 
 bool music_mask_user(uint16_t keycode) {
