@@ -43,8 +43,11 @@
 #define MOUSEKEY_MAX_SPEED 5
 
 // tap dance personalizations
-// #define TAPPING_TERM 175
+#define TAPPING_TERM 175
 
 // leader key settings
-#define LEADER_TIMEOUT 300
-#define LEADER_PER_KEY_TIMING
+// #define LEADER_TIMEOUT 300
+// #define LEADER_PER_KEY_TIMING
+
+// unicode setings
+#define UNICODE_SELECTED_MODES UC_LNX
