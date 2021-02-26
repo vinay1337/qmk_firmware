@@ -43,7 +43,7 @@
 #define MOUSEKEY_MAX_SPEED 5
 
 // tap dance personalizations
-#define TAPPING_TERM 175
+#define TAPPING_TERM 200
 
 // leader key settings
 // #define LEADER_TIMEOUT 300

@@ -69,12 +69,13 @@ void td_ctrl_finished(qk_tap_dance_state_t *state, void *user_data) {
   switch (td_state) {
     case SINGLE_TAP:
       // register_code16(KC_LPRN);
-      register_mods(MOD_BIT(KC_LCTL));
+      register_mods(MOD_BIT(KC_RCTL));
       break;
     case SINGLE_HOLD:
-      register_mods(MOD_BIT(KC_LCTL)); // For a layer-tap key, use `layer_on(_MY_LAYER)` here
+      register_mods(MOD_BIT(KC_RCTL)); // For a layer-tap key, use `layer_on(_MY_LAYER)` here
       break;
     case DOUBLE_SINGLE_TAP: // Allow nesting of 2 parens `((` within tapping term
+      register_mods(MOD_BIT(KC_RCTL) | MOD_BIT(KC_RSFT));
       // tap_code16(KC_LPRN);
       // register_code16(KC_LPRN);
       break;
@@ -84,14 +85,15 @@ void td_ctrl_reset(qk_tap_dance_state_t *state, void *user_data) {
   switch (td_state) {
     case SINGLE_TAP:
       // unregister_code16(KC_LPRN);
-      unregister_mods(MOD_BIT(KC_LCTL));
+      unregister_mods(MOD_BIT(KC_RCTL));
       break;
     case SINGLE_HOLD:
-      unregister_mods(MOD_BIT(KC_LCTL)); // For a layer-tap key, use `layer_off(_MY_LAYER)` here
+      unregister_mods(MOD_BIT(KC_RCTL)); // For a layer-tap key, use `layer_off(_MY_LAYER)` here
       break;
     case DOUBLE_SINGLE_TAP:
+      unregister_mods(MOD_BIT(KC_RCTL) | MOD_BIT(KC_RSFT));
         // unregister_code16(KC_LPRN);
-        break;
+      break;
     }
 }
 
@@ -125,7 +127,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB , KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
     ESC_NAV, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
     KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, ENTRSFT,
-    TD_CTRL, KC_LCTL, KC_LGUI, KC_LALT, RAISE,   KC_SPC,  KC_SPC,  LOWER,   KC_RCTL, KC_RGUI, KC_RALT, NAVIG
+    KC_LCTL, TD_CTRL, KC_LGUI, KC_LALT, RAISE,   KC_SPC,  KC_SPC,  LOWER,   TD_CTRL, KC_RGUI, KC_RALT, NAVIG
 ),
 
 /* Lower
