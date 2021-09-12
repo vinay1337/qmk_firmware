@@ -98,6 +98,7 @@ enum td_keycodes {
     TD_COLN,
     TD_QUOT,
     SFTENTR,
+    MNXTPRV,
     NAV_ESC,
 };
 qk_tap_dance_action_t tap_dance_actions[] = {
@@ -107,6 +108,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_COLN] = ACTION_TAP_DANCE_DOUBLE(KC_SCLN, KC_COLN),
     [TD_QUOT] = ACTION_TAP_DANCE_DOUBLE(KC_QUOT, KC_DQUO),
     [SFTENTR] = ACTION_TAP_DANCE_DOUBLE(KC_RSFT, KC_ENT),
+    [MNXTPRV] = ACTION_TAP_DANCE_DOUBLE(KC_MNXT, KC_MPRV),
     [NAV_ESC] = ACTION_TAP_DANCE_DUAL_ROLE(KC_ESC, _MOVE)
 };
 
@@ -118,6 +120,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 #define TD_CTRL  TD(TD_CTRL)
 #define TD_COLN  TD(TD_COLN)
 #define TD_QUOT  TD(TD_QUOT)
+#define MNXTPRV  TD(MNXTPRV)
 #define ONESHFT  OSM(MOD_LSFT)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -155,7 +158,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_GRV , KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_DEL,
     KC_TILD, _______, _______, _______, KC_LBRC, KC_LCBR, KC_RCBR, KC_RBRC, KC_MINS, KC_EQL , KC_PLUS, KC_PIPE,
     _______, _______, _______, _______, KC_LPRN, _______, _______, KC_RPRN, KC_LABK, KC_RABK, KC_BSLS, _______,
-    _______, _______, _______, _______, _______, KC_UNDS, KC_UNDS, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
+    _______, _______, _______, _______, _______, KC_UNDS, KC_UNDS, _______, MNXTPRV, KC_VOLD, KC_VOLU, KC_MPLY
 ),
 
 /* Raise
@@ -172,7 +175,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_LOWER] = LAYOUT_planck_grid(
     KC_GRV,  KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , KC_6   , KC_7   , KC_8   , KC_9  , KC_0   , KC_DEL ,
     KC_ESC,  KC_APP , KC_PSCR, _______, _______, _______, _______, KC_4   , KC_5   , KC_6  , KC_MINS, KC_EQL ,
-    _______, KC_MPRV, KC_MUTE, KC_MNXT, KC_MPLY, _______, _______, KC_1   , KC_2   , KC_3  , KC_PLUS, KC_ENT ,
+    _______, _______, KC_MUTE, _______, KC_INS , _______, _______, KC_1   , KC_2   , KC_3  , KC_PLUS, KC_ENT ,
     _______, _______, _______, _______, _______, KC_UNDS, KC_UNDS, _______, KC_0   , KC_DOT, _______, _______
 ),
 
@@ -190,8 +193,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_ADJUST] = LAYOUT_planck_grid(
     KC_F12 , KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  , KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , KC_F11 ,
-    _______, _______, _______, DEBUG  , _______, RGB_TOG, RGB_VAI, KC_VOLD, KC_VOLU, _______, _______, _______,
-    _______, _______, _______, _______, _______, RGB_HUI, RGB_SAI, _______, _______, _______, RESET  , _______,
+    _______, MUV_IN , AU_TOG , DEBUG  , _______, RGB_TOG, RGB_VAI, KC_VOLD, KC_VOLU, _______, _______, _______,
+    _______, MUV_DE , MI_TOG , _______, _______, RGB_HUI, RGB_SAI, MU_TOG , MU_MOD , _______, RESET  , _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 ),
 
