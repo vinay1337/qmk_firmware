@@ -157,7 +157,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_RAISE] = LAYOUT_planck_grid(
     KC_GRV , KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_MINS, KC_EQL , KC_DEL,
     KC_TILD, _______, _______, KC_LCBR, KC_LPRN, KC_LBRC, KC_RBRC, KC_RPRN, KC_RCBR, _______, KC_PLUS, KC_PIPE,
-    _______, _______, _______, _______, KC_LCBR, _______, _______, KC_RCBR, KC_LABK, KC_RABK, KC_BSLS, _______,
+    _______, _______, _______, _______, _______, _______, _______, _______, KC_LABK, KC_RABK, KC_BSLS, _______,
     _______, _______, _______, _______, _______, KC_UNDS, KC_UNDS, _______, MNXTPRV, KC_VOLD, KC_VOLU, KC_MPLY
 ),
 
@@ -209,6 +209,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 
+const key_override_t delete_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_BSPACE, KC_DELETE);
+const key_override_t underscore_space_override = ko_make_basic(MOD_MASK_SHIFT, KC_SPC, KC_UNDS);
+
+// This globally defines all key overrides to be used
+const key_override_t **key_overrides = (const key_override_t *[]){
+    &delete_key_override,
+    &underscore_space_override,
+    NULL // Null terminate the array of overrides!
+};
 
 
 
