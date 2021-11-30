@@ -30,6 +30,7 @@ enum custom_keycodes {
 
 #define ENTRSFT RSFT_T(KC_ENT)
 #define ESC_MOV LT(_MOVE, KC_ESC)
+#define RET_MOV LT(_MOVE, KC_ENT)
 #define BSLSCTL LCTL_T(KC_BSLS)
 #define SPCSFT  RSFT_T(KC_SPC)
 #define SPCTL   LCTL_T(KC_SPC)
@@ -59,7 +60,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_MINS,
     ESC_MOV, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
     KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
-    KC_LCTL, FN,      KC_LALT, KC_LGUI, KC_LCTL, SPCSFT,  KC_SPC,  FN     , KC_RCTL, KC_RGUI, KC_RALT, KC_ENT 
+    KC_LCTL, FN,      KC_LALT, KC_LGUI, KC_LCTL, SPCSFT,  KC_SPC,  FN     , KC_RCTL, KC_RGUI, KC_RALT, RET_MOV
 ),
 
 /* Function
@@ -87,8 +88,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_DEL ,
     _______, _______, KC_MS_U, _______, KC_WH_U, _______, _______, KC_PGDN, KC_PGUP, _______, _______, KC_EQL ,
     _______, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, _______, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, KC_COLN, KC_DQUO,
-    _______, _______, _______, _______, _______, KC_HOME, KC_END , _______, _______, _______, _______, KC_ENT ,
-    _______, _______, KC_BTN3, KC_BTN2, KC_BTN1, _______, KC_UNDS, _______, _______, _______, _______, _______
+    _______, _______, _______, _______, _______, KC_HOME, KC_END , _______, _______, _______, KC_BSLS, KC_ENT ,
+    _______, _______, KC_BTN3, KC_BTN2, KC_BTN1, _______, _______, _______, _______, _______, _______, _______
 ),
 
 [_ADJUST] = LAYOUT_ortho_5x12(
@@ -120,11 +121,13 @@ const key_override_t **key_overrides = (const key_override_t *[]){
 };
 
 // COMBOS
-const uint16_t PROGMEM test_combo1[] = {KC_T, KC_G, COMBO_END};
-const uint16_t PROGMEM test_combo2[] = {KC_Y, KC_H, COMBO_END};
+const uint16_t PROGMEM combo1[] = {KC_T, KC_G, COMBO_END};
+const uint16_t PROGMEM combo2[] = {KC_Y, KC_H, COMBO_END};
+const uint16_t PROGMEM combo3[] = {KC_P, KC_MINS, COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
-    COMBO(test_combo1, KC_LBRC),
-    COMBO(test_combo2, KC_RBRC), // keycodes with modifiers are possible too!
+    COMBO(combo1, KC_LBRC),
+    COMBO(combo2, KC_RBRC), // keycodes with modifiers are possible too!
+    COMBO(combo3, KC_EQL),
 };
 
 // MACROS

@@ -41,4 +41,4 @@
 #define DEBOUNCE 5
 
 // Number of combos
-#define COMBO_COUNT 2
+#define COMBO_COUNT 3
