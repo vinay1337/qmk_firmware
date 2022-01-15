@@ -26,6 +26,7 @@ enum layers {
 
 enum custom_keycodes {
     GITFETCH = SAFE_RANGE,
+    GITINIT,
 };
 
 #define ENTRSFT RSFT_T(KC_ENT)
@@ -78,10 +79,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_FUNCTION] = LAYOUT_ortho_5x12(
     KC_ESC , KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_DEL ,
-    _______, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSLS,
-    KC_TILD, _______, C(KC_S), KC_LCBR, KC_LPRN, KC_LBRC, KC_RBRC, KC_RPRN, KC_RCBR, _______, KC_MINS, KC_EQL , 
-    _______, C(KC_Z), C(KC_X), C(KC_C), C(KC_V), _______, _______, _______, KC_LABK, KC_RABK, _______, _______,
-    _______, _______, _______, _______, _______, _______, KC_UNDS, KC_MUTE, KC_VOLD, KC_VOLU, KC_MNXT, KC_MPLY
+    _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_MINS, KC_EQL , KC_PIPE,
+    KC_TILD, _______, C(KC_S), KC_LCBR, KC_LBRC, KC_LPRN, KC_RPRN, KC_RBRC, KC_RCBR, _______, KC_COLN, KC_DQUO, 
+    _______, C(KC_Z), C(KC_X), C(KC_C), C(KC_V), _______, _______, _______, KC_LABK, KC_RABK, KC_BSLS, _______,
+    _______, _______, _______, _______, _______, _______, KC_UNDS, KC_MUTE, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
 ),
 
 [_MOVE] = LAYOUT_ortho_5x12(
@@ -97,7 +98,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_F12 ,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-    _______, GITFETCH,_______, _______, _______, _______, _______, _______, GAME   , KOT    , _______, RESET
+    _______,GITFETCH, GITINIT, _______, _______, _______, _______, _______, GAME   , KOT    , _______, RESET
 ),
 
 [_GAME] = LAYOUT_ortho_5x12(
@@ -121,13 +122,15 @@ const key_override_t **key_overrides = (const key_override_t *[]){
 };
 
 // COMBOS
-const uint16_t PROGMEM combo1[] = {KC_T, KC_G, COMBO_END};
-const uint16_t PROGMEM combo2[] = {KC_Y, KC_H, COMBO_END};
+const uint16_t PROGMEM combo1[] = {KC_R, KC_T, COMBO_END};
+const uint16_t PROGMEM combo2[] = {KC_Y, KC_U, COMBO_END};
 const uint16_t PROGMEM combo3[] = {KC_P, KC_MINS, COMBO_END};
+const uint16_t PROGMEM combo4[] = {KC_O, KC_P, COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
     COMBO(combo1, KC_LBRC),
     COMBO(combo2, KC_RBRC), // keycodes with modifiers are possible too!
     COMBO(combo3, KC_EQL),
+    COMBO(combo4, KC_PLUS),
 };
 
 // MACROS
@@ -139,6 +142,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             SEND_STRING("git fetch; git status\n");
         } else {
             // when keycode GITFETCH is released
+        }
+        break;
+    case GITINIT:
+        if (record->event.pressed){
+            SEND_STRING("git config --global user.name 'Vinay Janardhanam'\n");
+            SEND_STRING("git config --global user.email vjanard");
+        } else {
+
         }
         break;
     }

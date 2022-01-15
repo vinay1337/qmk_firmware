@@ -1,4 +1,4 @@
-/* Copyright 2020 Paul James
+/* Copyright 2019 Thomas Baart <thomas@splitkb.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,37 +16,25 @@
 
 #pragma once
 
-#include "config_common.h"
+#ifdef RGBLIGHT_ENABLE
+#    define RGBLIGHT_ANIMATIONS
+#    define RGBLIGHT_HUE_STEP  8
+#    define RGBLIGHT_SAT_STEP  8
+#    define RGBLIGHT_VAL_STEP  8
+#    define RGBLIGHT_LIMIT_VAL 150
+#    define RGBLIGHT_LAYERS
+#endif
 
-/* USB Device descriptor parameter */
-#define VENDOR_ID 0x706A
-#define PRODUCT_ID 0x0002
-#define DEVICE_VER 0x0001
-#define MANUFACTURER Peej
-#define PRODUCT Lumberjack
+// Lets you roll mod-tap keys
+#define IGNORE_MOD_TAP_INTERRUPT
 
-/* key matrix size */
-#define MATRIX_ROWS 6
-#define MATRIX_COLS 10
-#define MATRIX_ROW_PINS { C0, B5, B4, B3, B2, B1 }
-#define MATRIX_COL_PINS { B0, D7, D6, D5, D4, D1, D0, C1, C2, C3 }
-#define UNUSED_PINS
-
-/* COL2ROW, ROW2COL*/
-#define DIODE_DIRECTION COL2ROW
-
-#define USB_MAX_POWER_CONSUMPTION 100
-
-/* Debounce reduces chatter (unintended double-presses) - set 0 if debouncing is not needed */
-#define DEBOUNCE 5
+// If you are using an Elite C rev3 on the slave side, uncomment the lines below:
+// #define SPLIT_USB_DETECT
+// #define NO_USB_STARTUP_CHECK
 
 // mouse key personalizations
 #define MOUSEKEY_DELAY 75
 #define MOUSEKEY_INTERVAL 16
 #define MOUSEKEY_MAX_SPEED 5
 
-// tap dance personalizations
-#define TAPPING_TERM 175
-
-// Number of combos
-#define COMBO_COUNT 4
+#define ENCODER_RESOLUTION 2

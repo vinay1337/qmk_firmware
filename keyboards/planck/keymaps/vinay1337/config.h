@@ -45,6 +45,9 @@
 // tap dance personalizations
 #define TAPPING_TERM 175
 
+// Number of combos
+#define COMBO_COUNT 7
+
 // leader key settings
 // #define LEADER_TIMEOUT 300
 // #define LEADER_PER_KEY_TIMING

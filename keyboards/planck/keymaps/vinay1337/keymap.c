@@ -91,7 +91,6 @@ void td_ctrl_reset(qk_tap_dance_state_t *state, void *user_data) {
       break;
     }
 }
-
 // Tap Dance declarations
 enum td_keycodes {
     TD_CTRL,
@@ -211,7 +210,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 
 const key_override_t delete_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_BSPACE, KC_DELETE);
-const key_override_t underscore_space_override = ko_make_basic(MOD_MASK_SHIFT, KC_SPC, KC_UNDS);
+const key_override_t underscore_space_override = ko_make_basic(MOD_BIT(KC_RSFT), KC_SPC, KC_UNDS);
 
 // This globally defines all key overrides to be used
 const key_override_t **key_overrides = (const key_override_t *[]){
@@ -221,6 +220,24 @@ const key_override_t **key_overrides = (const key_override_t *[]){
 };
 
 
+// COMBOS
+const uint16_t PROGMEM combo1[] = {KC_O, KC_P, COMBO_END};
+// const uint16_t PROGMEM combo2[] = {KC_L, KC_SCLN, COMBO_END};
+const uint16_t PROGMEM combo2[] = {KC_P, KC_BSPC, COMBO_END};
+const uint16_t PROGMEM combo3[] = {KC_D, KC_F, COMBO_END};
+const uint16_t PROGMEM combo4[] = {KC_J, KC_K, COMBO_END};
+const uint16_t PROGMEM sleep[] = {KC_TAB, KC_LCTL, KC_BSPC, MOV_PLY, COMBO_END};
+const uint16_t PROGMEM enter_homerow[] = {KC_J, KC_K, KC_L, COMBO_END};
+const uint16_t PROGMEM escape_homerow[] = {KC_S, KC_D, KC_F, COMBO_END};
+combo_t key_combos[COMBO_COUNT] = {
+    COMBO(combo1, KC_MINS),
+    COMBO(combo2, KC_EQL),
+    COMBO(combo3, KC_LSFT),
+    COMBO(combo4, KC_RSFT),
+    COMBO(sleep, KC_SLEP),
+    COMBO(enter_homerow, KC_ENTER),
+    COMBO(escape_homerow, KC_ESCAPE),
+};
 
 #ifdef AUDIO_ENABLE
   float plover_song[][2]     = SONG(PLOVER_SOUND);
