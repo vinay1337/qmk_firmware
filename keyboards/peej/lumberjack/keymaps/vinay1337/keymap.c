@@ -27,6 +27,7 @@ enum layers {
 enum custom_keycodes {
     GITFETCH = SAFE_RANGE,
     GITINIT,
+    GITPULL,
 };
 
 #define ENTRSFT RSFT_T(KC_ENT)
@@ -98,7 +99,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_F12 ,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-    _______,GITFETCH, GITINIT, _______, _______, _______, _______, _______, GAME   , KOT    , _______, RESET
+    GITPULL,GITFETCH, GITINIT, _______, _______, _______, _______, _______, GAME   , KOT    , _______, RESET
 ),
 
 [_GAME] = LAYOUT_ortho_5x12(
@@ -148,6 +149,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (record->event.pressed){
             SEND_STRING("git config --global user.name 'Vinay Janardhanam'\n");
             SEND_STRING("git config --global user.email vjanard");
+        } else {
+
+        }
+        break;
+    case GITPULL:
+        if (record->event.pressed){
+            SEND_STRING("git pull -n -autostash --rebase=interactive'\n");
         } else {
 
         }
